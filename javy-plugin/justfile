@@ -1,0 +1,8 @@
+#!/usr/bin/env just --justfile
+
+clean:
+   cargo clean
+
+# dump compile dependencies to dependencies.txt
+build:
+  cargo build -r --target=wasm32-wasip1
