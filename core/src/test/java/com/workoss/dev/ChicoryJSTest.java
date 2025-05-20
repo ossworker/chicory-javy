@@ -61,8 +61,8 @@ public class ChicoryJSTest {
 
     @Test
     public void javaFunctionInvocations() {
-        long start = System.currentTimeMillis();
-        var chicoryJs =
+
+        ChicoryJS chicoryJs =
                 ChicoryJS.builder()
                         .withImportedFunction(
                                 (str) -> {
@@ -70,10 +70,10 @@ public class ChicoryJSTest {
                                     return "java_imported_function(\"from_java\");";
                                 })
                         .build();
-
+        long start = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             // Act
-            var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js:\"+plugin));");
+            var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js:\"+plugin+"+i+"));");
             chicoryJs.exec(codePtr);
             chicoryJs.free(codePtr);
         }
