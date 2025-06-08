@@ -35,15 +35,25 @@
 <!--            <groupId>com.dylibso.chicory</groupId>-->
 <!--            <artifactId>simd</artifactId>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.dylibso.chicory</groupId>-->
-<!--            <artifactId>aot-experimental</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.dylibso.chicory</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.dylibso.chicory</groupId>
-            <artifactId>host-module-annotations-experimental</artifactId>
+            <artifactId>compiler</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.dylibso.chicory</groupId>
+            <artifactId>build-time-compiler</artifactId>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.dylibso.chicory</groupId>-->
+<!--            <artifactId>host-module-annotations-experimental</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>io.projectreactor</groupId>
@@ -91,8 +101,32 @@
             <type>pom</type>
         </dependency>
 
-
     </dependencies>
+
+    <repositories>
+        <!-- Authine CloudPivot Repository 声明 -->
+        <repository>
+            <id>nexus</id>
+            <name>Authine nexus</name>
+            <url>https://nexus01.authine.cn/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- 其他repository 声明 -->
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <reporting>
         <plugins>
@@ -171,13 +205,13 @@
 
             <plugin>
                 <groupId>com.dylibso.chicory</groupId>
-                <artifactId>aot-maven-plugin-experimental</artifactId>
+                <artifactId>chicory-compiler-maven-plugin</artifactId>
                 <version>${chicory.version}</version>
                 <executions>
                     <execution>
-                        <id>aot-gen</id>
+                        <id>compiler-gen</id>
                         <goals>
-                            <goal>wasm-aot-gen</goal>
+                            <goal>compile</goal>
                         </goals>
                         <configuration>
                             <!-- Translate the Wasm binary `add` into bytecode -->
@@ -197,7 +231,7 @@
                     <annotationProcessorPaths>
                         <path>
                             <groupId>com.dylibso.chicory</groupId>
-                            <artifactId>host-module-processor-experimental</artifactId>
+                            <artifactId>annotations-processor</artifactId>
                             <version>${chicory.version}</version>
                         </path>
                     </annotationProcessorPaths>

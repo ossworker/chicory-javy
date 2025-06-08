@@ -1,7 +1,7 @@
 package com.workoss.dev;
 
 
-import com.dylibso.chicory.experimental.hostmodule.annotations.WasmModuleInterface;
+import com.dylibso.chicory.annotations.WasmModuleInterface;
 import com.dylibso.chicory.runtime.ByteArrayMemory;
 import com.dylibso.chicory.runtime.HostFunction;
 import com.dylibso.chicory.runtime.ImportValues;
@@ -13,6 +13,7 @@ import com.dylibso.chicory.wasm.types.ValueType;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.function.Function;
+
 
 @WasmModuleInterface("file:/Users/workoss/IDE/ideaProjects/chicory-javy/javy-plugin/target/wasm32-wasip1/release/javy_plugin.wasm")
 public class ChicoryJS implements AutoCloseable {
@@ -60,9 +61,9 @@ public class ChicoryJS implements AutoCloseable {
 
     private ChicoryJS(Function<String, String> importFun) {
         this.importFun = importFun;
-        instance = Instance.builder(JavyPluginModule.load())
+        instance = Instance.builder(JavyPlugin.load())
                 .withMemoryFactory(ByteArrayMemory::new)
-                .withMachineFactory(JavyPluginModule::create)
+                .withMachineFactory(JavyPlugin::create)
                 .withImportValues(
                         ImportValues.builder()
                                 .addFunction(wasi.toHostFunctions())
