@@ -50,7 +50,7 @@ public class ChicoryJSTest {
                         .build();
 
         // Act
-        var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js\"));");
+        var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js\"));console.info('-------');");
         //  var codePtr = chicoryJs.compile("console.error(java_imported_function(\"from_js\"));");
         chicoryJs.exec(codePtr);
         chicoryJs.free(codePtr);
@@ -73,13 +73,13 @@ public class ChicoryJSTest {
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             // Act
-            var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js:\"+plugin+"+i+"));");
+            var codePtr = chicoryJs.compile("eval(java_imported_function(\"from_js:\"+plugin+"+i+")); console.error('----------');");
             chicoryJs.exec(codePtr);
             chicoryJs.free(codePtr);
         }
         chicoryJs.close();
 
         long end = System.currentTimeMillis();
-        System.out.println("Java Function execution time: " + (end - start) + "ms");
+        System.out.println("Java Function execution time: " + (end - start)/1000 + "ms");
     }
 }
