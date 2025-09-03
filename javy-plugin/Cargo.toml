@@ -5,9 +5,11 @@ version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib"]
+name = "javy_plugin"
 
 [dependencies]
-javy-plugin-api = {version = "3", features = ["json"]}
+javy-plugin-api = {version = "4", features = ["json"]}
+wit-bindgen = {version = "0.45"}
 
 [profile.release]
 codegen-units = 1 # Allows LLVM to perform better optimization.
