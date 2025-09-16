@@ -1,3 +1,6 @@
+//! Plugin used for testing. We need a plugin with slightly different behavior
+//! to validate a plugin is actually used when it should be.
+
 use javy_plugin_api::{
     Config,
     javy::{Runtime, quickjs::prelude::Func},
@@ -11,7 +14,6 @@ fn config() -> Config {
 }
 
 fn modify_runtime(runtime: Runtime) -> Runtime {
-    // You can modify the runtime here if needed.
     runtime.context().with(|ctx| {
         ctx.globals().set("plugin", true).unwrap();
         ctx.globals()
@@ -23,7 +25,6 @@ fn modify_runtime(runtime: Runtime) -> Runtime {
             )
             .unwrap();
     });
-
     runtime
 }
 
