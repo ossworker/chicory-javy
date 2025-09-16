@@ -5,4 +5,6 @@ clean:
 
 # dump compile dependencies to dependencies.txt
 build:
-  cargo build -r --target=wasm32-wasip1
+  cargo build -r --target=wasm32-wasip2
+
+  javy init-plugin target/wasm32-wasip2/release/javy_plugin.wasm -o target/wasm32-wasip2/release/javy_plugin.min.wasm
