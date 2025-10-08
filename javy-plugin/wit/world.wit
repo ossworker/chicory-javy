@@ -7,3 +7,11 @@ world javy-plugin {
 
     import imported-function: func();
 }
+
+// world blobstore {
+//     include wasi:blobstore/imports@0.2.0-draft;
+// }
+
+// world keyvalue {
+//     include wasi:keyvalue/imports@0.2.0-draft2;
+// }

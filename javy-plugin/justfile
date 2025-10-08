@@ -1,10 +1,10 @@
-#!/usr/bin/env just --justfile
-
 clean:
    cargo clean
 
 # dump compile dependencies to dependencies.txt
 build:
   cargo build -r --target=wasm32-wasip2
-
   javy init-plugin target/wasm32-wasip2/release/javy_plugin.wasm -o target/wasm32-wasip2/release/javy_plugin.min.wasm
+
+transpile:
+   javy transpile target/wasm32-wasip2/release/javy_plugin.min.wasm -o target/wasm32-wasip2/release/javy_plugin.js
