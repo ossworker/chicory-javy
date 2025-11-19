@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.function.Function;
 
 
-@WasmModuleInterface("file:/Users/workoss/IDE/ideaProjects/chicory-javy/javy-plugin/target/wasm32-wasip1/release/javy_plugin.wasm")
+//@WasmModuleInterface("file:D:/IDE/ideaProjects/chicory-javy/javy-plugin/target/wasm32-wasip2/release/javy_plugin.min.wasm")
+@WasmModuleInterface("file:/D:/IDE/ideaProjects/chicory-javy/javy-plugin/target/wasm32-wasip2/release/javy_plugin.min.wasm")
 public class ChicoryJS implements AutoCloseable {
     private static final int ALIGNMENT = 1;
     private final WasiOptions wasiOptions = WasiOptions.builder().inheritSystem().build();
@@ -40,13 +41,12 @@ public class ChicoryJS implements AutoCloseable {
 
         String returnStr = this.importFun.apply(str);
         byte[] returnBytes = returnStr.getBytes(StandardCharsets.UTF_8);
-
-        int returnPtr = exports.canonicalAbiRealloc(0, 0, ALIGNMENT, returnBytes.length);
+        int returnPtr = exports.cabiRealloc(0, 0, ALIGNMENT, returnBytes.length);
         exports.memory().write(returnPtr, returnBytes);
 
         int LEN = 8;
         int widePtr =
-                exports.canonicalAbiRealloc(
+                exports.cabiRealloc(
                         0, // original_ptr
                         0, // original_size
                         ALIGNMENT, // alignment
@@ -65,17 +65,19 @@ public class ChicoryJS implements AutoCloseable {
                 .withMemoryFactory(ByteArrayMemory::new)
                 .withMachineFactory(JavyPlugin::create)
                 .withImportValues(
+
                         ImportValues.builder()
                                 .addFunction(wasi.toHostFunctions())
-                                .addFunction(new HostFunction(
-                                        "chicory",
-                                        "imported_function",
-                                        List.of(ValueType.I32, ValueType.I32),
-                                        List.of(ValueType.I32),
-                                        this::importedFunction
-                                ))
+//                                .addFunction(new HostFunction(
+//                                        "chicory",
+//                                        "imported_function",
+//                                        List.of(ValueType.I32, ValueType.I32),
+//                                        List.of(ValueType.I32),
+//                                        this::importedFunction
+//                                ))
                                 .build()
                 )
+                .withUnsafeExecutionListener((machine, event) -> System.out.println("current instruction: " + machine + ", stack size: " + event.size()))
                 .build();
         exports = new ChicoryJS_ModuleExports(instance);
         exports.initializeRuntime();
@@ -83,7 +85,7 @@ public class ChicoryJS implements AutoCloseable {
 
     public int compile(String js) {
         byte[] jsBytes = js.getBytes(StandardCharsets.UTF_8);
-        int ptr = exports.canonicalAbiRealloc(0, 0, ALIGNMENT, jsBytes.length);
+        int ptr = exports.cabiRealloc(0, 0, ALIGNMENT, jsBytes.length);
 
         exports.memory().write(ptr, jsBytes);
         int compileSrc = exports.compileSrc(ptr, jsBytes.length);
@@ -93,22 +95,19 @@ public class ChicoryJS implements AutoCloseable {
 
     public void exec(int codePtr) {
         int codeLength = exports.memory().readInt(codePtr + 4);
+        exports.invoke(codePtr, codeLength,0,0,0);
+//        exports.invoke(
+//                codePtr, //bytecode_ptr
+//                codeLength, //bytecode_len
+//                0, //fn_name_ptr
+//                0 //fn_name_len
+//        );
 
-        exports.invoke(
-                codePtr, //bytecode_ptr
-                codeLength, //bytecode_len
-                0, //fn_name_ptr
-                0 //fn_name_len
-        );
     }
 
     public void free(int codePtr) {
         int codeLength = exports.memory().readInt(codePtr + 4);
-        exports.canonicalAbiFree(
-                codePtr,
-                codeLength,
-                ALIGNMENT
-        );
+        exports.cabiRealloc(codePtr, codeLength, ALIGNMENT, 0);
     }
 
 

@@ -17,11 +17,11 @@ public class Pty4jTest {
 
 
     public static void main(String[] args) {
-        test01();
+        new Pty4jTest().test01();
     }
 
     @Test
-    static void test01() {
+     void test01() {
         PtyProcess process = null;
         try {
             String[] cmd = {"/bin/sh", "-l"};

@@ -15,12 +15,12 @@ public class ChicoryJSTest {
         var invoked = new AtomicBoolean(false);
         var chicoryJs =
                 ChicoryJS.builder()
-                        .withImportedFunction(
-                                (str) -> {
-                                    assertEquals("ciao", str);
-                                    invoked.set(true);
-                                    return "{ received: " + str + "}";
-                                })
+//                        .withImportedFunction(
+//                                (str) -> {
+//                                    assertEquals("ciao", str);
+//                                    invoked.set(true);
+//                                    return "{ received: " + str + "}";
+//                                })
                         .build();
 
         // Act

@@ -3,8 +3,17 @@ clean:
 
 # dump compile dependencies to dependencies.txt
 build:
+  set LIBCLANG_PATH=D:\software\LLVM\bin
   cargo build -r --target=wasm32-wasip2
   javy init-plugin target/wasm32-wasip2/release/javy_plugin.wasm -o target/wasm32-wasip2/release/javy_plugin.min.wasm
 
+test:
+    javy build -C dynamic -C plugin=javy_plugin.min.wasm -o my_code.wasm my_code.js
+    wasmtime run --preload javy-plugin-v1=javy_plugin.min.wasm my_code.wasm
+
+test_node:
+    javy build -C dynamic -C plugin=javy_plugin.min.wasm -o embedded.wasm embedded.js
+    node --no-warnings=ExperimentalWarning host.mjs
+
 transpile:
-   javy transpile target/wasm32-wasip2/release/javy_plugin.min.wasm -o target/wasm32-wasip2/release/javy_plugin.js
+   jco transpile target/wasm32-wasip2/release/javy_plugin.wasm -o js

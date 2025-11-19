@@ -1,0 +1,14 @@
+javy init-plugin -- --enable-bulk-memory javy_plugin.wasm -o javy_plugin.init.wasm
+
+javy init-plugin javy_plugin.wasm -o javy_plugin.init.wasm
+
+RUSTFLAGS="-C target-feature=+bulk-memory" cargo build -r --target wasm32-wasip2
+
+RUSTFLAGS="-C target-feature=+bulk-memory" javy init-plugin javy_plugin.wasm -o javy_plugin.init.wasm
+
+
+192.168.7.106
+
+export https_proxy=http://192.168.7.106:60267;
+export http_proxy=http://192.168.7.106:60267;
+export all_proxy=socks5://192.168.7.106:60267
